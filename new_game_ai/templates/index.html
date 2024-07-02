@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MY GAME</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='settings.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='how-to.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='start.css') }}">
+</head>
+<body>
+
+<header class="header">
+    <a href="#" class="logo">THE GAME</a>
+    <div class="close-button" id="closeButton" onclick="goBack()">X</div> <!-- Close button added -->
+</header>
+
+<section class="main" id="main">
+  <div class="home-content"> 
+    <h1>Hi, Welcome To The <span>GAME</span> </h1>
+    <h3>To Start The game Please Click "Start Button"</h3>
+    <div class="btn-box">
+      <a href="#" class="btn" onclick="showStart()">Start</a>
+      <a href="#" class="btn" onclick="showSettings()">Settings</a>
+      <a href="#" class="btn" onclick="showHowTo()">How To?</a>
+    </div>
+  </div> 
+</section>
+
+<section class="settings" id="settings">
+  <div class="settings-content"> 
+    <h1>Welcome To The <span>SETTINGS</span> </h1>
+    <h3>To Change Game Mode Please Select "Algorithm"</h3>
+    <div class="settings-btn-box">
+      <a href="#" class="btn" onclick="chooseAlgorithm('minimax')">Min-Max</a>
+      <a href="#" class="btn" onclick="chooseAlgorithm('alpha_beta')">Alpha-Beta</a>
+      <a href="#" class="btn" onclick="goBack()">Go back</a>
+    </div>
+  </div> 
+</section>
+
+<section class="how-to" id="how-to">
+  <div class="how-to-content"> 
+    <h1>How To <span>Play</span> </h1>
+    <h3>At the beginning of the game, choose a number between 8 and 18 to start. 
+      Both players start with 0 points. Players take turns multiplying the current number by 2, 3, or 4. 
+      If the result is even, deduct 1 point from the opponent's score; if odd, add 1 point to your score. 
+      The game ends when a number greater than or equal to 1200 is reached. 
+      The player with the highest score wins. In case of a tie, it's a draw. <br> <br>
+      <span>Make sure to follow these steps before starting game:</span> <br>
+      Go to the settings section and choose your preferred algorithm. <br>
+      Click on the "Start" button to begin the game. <br>
+      Choose who is going to start the computer or player (you).</h3>
+    <div class="how-to-btn-box">
+      <a href="#" class="btn" onclick="goBack()">Go back</a>
+    </div>
+  </div> 
+</section>
+
+<section class="start" id="start">
+  <div class="start-content"> 
+    <h1>Game is about to <span>START</span></h1>
+    <h3>Choose who is going to start first and after that game will be started</h3>
+    <div class="start-btn-box">
+      <a href="#" class="btn" onclick="startGameComp()">Computer</a>
+      <a href="#" class="btn" onclick="startGamePlayer()">Player</a>
+    </div>
+  </div> 
+</section>
+
+<!-- New -->
+<!-- <section id="startNum" style="display:none;">
+  <div id="gameSetup">
+    <input type="number" id="startingNumber" min="8" max="18" placeholder="Enter a number (8-18)">
+    <a href="#" class="btn" onclick="startGame()">Confirm Start Number</a>
+  </div>
+</section> -->
+
+<!-- Section for game with Computer -->
+<section id="gamePlayComp" style="display:none;">
+  <h2>Enter a number between 8 and 18 to start the game: </h2>
+    <div id="gameSetup"> 
+      <input type="number" id="startingNumber1" min="8" max="18" placeholder="Enter a number (8-18)">
+      <a href="#" class="btn" onclick="startGame()">Confirm Start Number</a>
+    </div>
+  <h2>Current Number: <span id="currentNumber1">0</span></h2>
+  <div id="scores">
+      <p>Your Score: <span id="playerScore">0</span></p>
+      <p>Computer's Score: <span id="computerScore">0</span></p>
+  </div>
+  <div class="btn-box">
+    <a href="#" class="btn" onclick="humanMakesMove(2)">Multiply by 2</a>
+    <a href="#" class="btn" onclick="humanMakesMove(3)">Multiply by 3</a>
+    <a href="#" class="btn" onclick="humanMakesMove(4)">Multiply by 4</a>
+    <a href="#" class="btn" onclick="compMakesMove()">Computer move</a>
+</div>
+  <h3 id="gameStatus">Game in progress...</h3>
+</section>
+
+<!-- Section for game with Player -->
+<section id="gamePlayHuman" style="display:none;">
+  <h2>Enter a number between 8 and 18 to start the game: </h2>
+  <div id="gameSetup">
+    <input type="number" id="startingNumber2" min="8" max="18" placeholder="Enter">
+    <a href="#" class="btn" onclick="startGame()">Confirm Start Number</a>
+  </div>
+  <h2>Current Number: <span id="currentNumber2">0</span></h2>
+  <div id="scores">
+      <p>Player 1 Score: <span id="player1Score">0</span></p>
+      <p>Player 2 Score: <span id="player2Score">0</span></p>
+  </div>
+  <h3 id="currentPlayer">Player 1's Turn</h3>
+  <div class="btn-box">
+      <a href="#" class="btn" onclick="playerMakesMove(2)">Multiply by 2</a>
+      <a href="#" class="btn" onclick="playerMakesMove(3)">Multiply by 3</a>
+      <a href="#" class="btn" onclick="playerMakesMove(4)">Multiply by 4</a>
+  </div>
+  <h3 id="gameStatus">Game in progress...</h3>
+</section>
+
+<section id="gameEnd" style="display:none;">
+  <h1>Game Finished!</h1>
+  <h1><span id="endMessage"></span></h1>
+  <a href="#" class="btn" onclick="location.reload()">Play Again</a>
+</section>
+
+<script>
+  function showStart() {
+    document.getElementById("main").style.display = "none";
+    document.getElementById("settings").style.display = "none";
+    document.getElementById("how-to").style.display = "none";
+    document.getElementById("start").style.display = "block";
+    document.getElementById("closeButton").style.display = "block"; // Show close button
+  }
+  function showSettings() {
+    document.getElementById("main").style.display = "none";
+    document.getElementById("settings").style.display = "block";
+    document.getElementById("how-to").style.display = "none";
+    document.getElementById("start").style.display = "none";
+    document.getElementById("closeButton").style.display = "none"; // Hide close button
+  }
+  function goBack() {
+    document.getElementById("settings").style.display = "none";
+    document.getElementById("main").style.display = "flex";
+    document.getElementById("how-to").style.display = "none";
+    document.getElementById("start").style.display = "none";
+    document.getElementById("closeButton").style.display = "none"; // Hide close button
+  }
+  function showHowTo() {
+    document.getElementById("main").style.display = "none";
+    document.getElementById("settings").style.display = "none";
+    document.getElementById("how-to").style.display = "block";
+    document.getElementById("start").style.display = "none";
+    document.getElementById("closeButton").style.display = "none"; // Hide close button
+  }
+  // function chooseStartNumber() {
+  //   document.getElementById("main").style.display = "none";
+  //   document.getElementById("settings").style.display = "none";
+  //   document.getElementById("how-to").style.display = "none";
+  //   document.getElementById("start").style.display = "none";
+  //   document.getElementById("closeButton").style.display = ""; // Show close button
+  //   document.getElementById("startNum").style.display = "";
+  // }
+  function startGameComp() {
+    document.getElementById("main").style.display = "none";
+    document.getElementById("settings").style.display = "none";
+    document.getElementById("how-to").style.display = "none";
+    document.getElementById("start").style.display = "none";
+    document.getElementById("closeButton").style.display = ""; // Show close button
+    document.getElementById("gamePlayComp").style.display = "";//Show game UI with Computer
+  }
+  function startGamePlayer() {
+    document.getElementById("main").style.display = "none";
+    document.getElementById("settings").style.display = "none";
+    document.getElementById("how-to").style.display = "none";
+    document.getElementById("start").style.display = "none";
+    document.getElementById("closeButton").style.display = ""; // Show close button
+    document.getElementById("gamePlayHuman").style.display = "";// Show game UI with Player
+  }
+
+  // Addition
+  let currentPlayer = 1;
+
+  let selectedAlgorithm = 'minimax'; // Default selection
+
+  function chooseAlgorithm(algorithm) {
+      selectedAlgorithm = algorithm;
+      // Optionally, store the selection in local storage for persistence
+      localStorage.setItem('selectedAlgorithm', algorithm);
+      // Provide feedback or move to the next step in the UI as needed
+  }
+
+  function calculateBestMove(currentNumber) {
+    // Retrieve the selected algorithm from local storage
+    const algorithm = localStorage.getItem('selectedAlgorithm') || 'minimax'; // Default to 'minimax' if not set
+    console.log(algorithm);
+    fetch('/calculate_best_move', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            currentNumber: currentNumber,
+            algorithm: algorithm, // Include the algorithm in the request body
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Best move received:', data.best_move);
+        applyMove(data.best_move);
+        // compMakesMove(data.best_move);
+        // Apply the best move in your game...
+    })
+    .catch(error => console.error('Failed to calculate the best move:', error));
+
+  }
+
+  function startGame() {
+      let startingNumber;
+      let startingNumber1 = document.getElementById('startingNumber1').value;
+      let startingNumber2 = document.getElementById('startingNumber2').value;
+      if (startingNumber1) {
+        startingNumber = startingNumber1;
+        document.getElementById('currentNumber1').textContent = startingNumber;
+      } else {
+        startingNumber = startingNumber2;
+        document.getElementById('currentNumber2').textContent = startingNumber;
+      }
+      console.log(startingNumber);
+      console.log("1", startingNumber1);
+      console.log("2", startingNumber2);
+      if(startingNumber < 8 || startingNumber > 18) {
+          alert('Please enter a number between 8 and 18.');
+          return;
+      }
+      
+      // Initialize scores and current player
+      updateScores(0, 0);
+      updateCurrentPlayer();
+  }
+
+  function humanMakesMove(multiplier) {
+      let currentNumberHuman = parseInt(document.getElementById('currentNumber1').textContent);
+      console.log("currentNumberHuman  befor move : ", currentNumberHuman);
+      currentNumberHuman *= multiplier;
+      document.getElementById('currentNumber1').textContent = currentNumberHuman;
+
+      if(currentNumberHuman % 2 === 0) {
+        updateScoresWithComp(0, -1);
+      } else {
+        updateScoresWithComp(+1, 0);
+      }
+
+      // Check for game over
+      if(currentNumberHuman >= 1200) {
+          endGame();
+          return;
+      }
+
+      if(currentNumber2 >= 1200) {
+          endGame();
+          return;
+      }
+
+      // calculateBestMove(currentNumberHuman);
+  }
+
+  function applyMove(multiplier) {
+    let currentNumberComp = parseInt(document.getElementById('currentNumber1').textContent);
+    console.log("currentNumberComp befor move : ", currentNumberComp);
+    currentNumberComp *= multiplier;
+    document.getElementById('currentNumber1').textContent = currentNumberComp;
+
+    if(currentNumberComp % 2 === 0) {
+        updateScoresWithComp(-1, 0);
+      } else {
+        updateScoresWithComp(0, +1);
+      }
+
+      // Check for game over
+      if(currentNumberComp >= 1200) {
+          endGame();
+          return;
+      }
+  }
+
+  function compMakesMove(multiplier) {
+    if (multiplier) { // If called directly with a multiplier, apply it
+        applyMove(multiplier);
+    } else { // If called without a multiplier (e.g., via onclick), calculate the move
+        const currentNumber = parseInt(document.getElementById('currentNumber1').textContent);
+        calculateBestMove(currentNumber); // This will call `applyMove` with the best move
+    }
+  }
+
+  function updateScoresWithComp(player1Change, player2Change) {
+      const player1Score = parseInt(document.getElementById('playerScore').textContent) + player1Change;
+      const player2Score = parseInt(document.getElementById('computerScore').textContent) + player2Change;
+      document.getElementById('playerScore').textContent = player1Score;
+      document.getElementById('computerScore').textContent = player2Score;
+  }
+
+
+  // 2nd type of game
+
+  function playerMakesMove(multiplier) {
+      let currentNumber2 = parseInt(document.getElementById('currentNumber2').textContent);
+      console.log(currentNumber2);
+      currentNumber2 *= multiplier;
+      document.getElementById('currentNumber2').textContent = currentNumber2;
+      
+
+      // Update scores based on even or odd
+      if(currentNumber2 % 2 === 0) {
+          if(currentPlayer === 1) {
+              updateScores(0, -1);
+          } else {
+              updateScores(-1, 0);
+          }
+      } else {
+          if(currentPlayer === 1) {
+              updateScores(+1, 0);
+          } else {
+              updateScores(0, +1);
+          }
+      }
+
+      // Check for game over
+      if(currentNumber2 >= 1200) {
+          endGame();
+          return;
+      }
+      
+      // Switch current player
+      currentPlayer = currentPlayer === 1 ? 2 : 1;
+      updateCurrentPlayer();
+  }
+
+  function updateScores(player1Change, player2Change) {
+      const player1Score = parseInt(document.getElementById('player1Score').textContent) + player1Change;
+      const player2Score = parseInt(document.getElementById('player2Score').textContent) + player2Change;
+      document.getElementById('player1Score').textContent = player1Score;
+      document.getElementById('player2Score').textContent = player2Score;
+  }
+
+  function updateCurrentPlayer() {
+      document.getElementById('currentPlayer').textContent = `Player ${currentPlayer}'s Turn`;
+  }
+
+  function endGame() {
+      let player1Score;
+      let player2Score;
+
+      player1Score1 = parseInt(document.getElementById('playerScore').textContent);
+      player2Score1 = parseInt(document.getElementById('computerScore').textContent);
+      player1Score2 = parseInt(document.getElementById('player1Score').textContent);
+      player2Score2 = parseInt(document.getElementById('player2Score').textContent);
+
+      if(player1Score1) {
+        player1Score = parseInt(document.getElementById('playerScore').textContent);
+        player2Score = parseInt(document.getElementById('computerScore').textContent);
+      } else {
+        player1Score = parseInt(document.getElementById('player1Score').textContent);
+        player2Score = parseInt(document.getElementById('player2Score').textContent);
+      }
+      
+      let message;
+      if(player1Score > player2Score) {
+          message = 'Player 1 Wins!';
+      } else if(player2Score >  player1Score) {
+          message = 'Player 2 Wins!';
+      } else {
+        message = 'Draw!';
+      }
+      console.log(message);
+      console.log(player1Score);
+      console.log(player2Score);
+      document.getElementById('endMessage').textContent = message;
+      document.getElementById('gamePlayHuman').style.display = 'none';
+      document.getElementById('gamePlayComp').style.display = 'none';
+      document.getElementById('gameEnd').style.display = 'block';
+  }
+
+</script>
+
+</body>
+</html>

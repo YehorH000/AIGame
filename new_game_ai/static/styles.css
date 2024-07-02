@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap');
+
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  position: fixed;
+  width: 100%;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  scroll-behavior: smooth;
+  font-family: 'Teko', sans-serif;
+}
+
+:root {
+  --primary-color: #070506;
+  --secondary-color: #FADA22;
+  --text-color: #ffff;
+  --main-color: #FADA22;
+}
+
+html {
+  font-size: 85%;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem 2%;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  text-decoration: none;
+}
+
+.logo {
+  font-size: 3rem;
+  color: var(--text-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar a {
+  font-size: 2rem;
+  color: var(--text-color);
+  font-weight: 500;
+  margin: 1.5rem;
+  text-decoration: none;
+}
+
+section {
+  min-height: 100vh;
+  padding: 20rem 5% 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-content {
+  max-width: 70rem;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.home-content h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.home-content h3 {
+    font-size: 2rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+.btn-box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  width: 28rem;
+  height: 16rem;
+  margin: 2rem auto; 
+}
+
+.btn-box .btn {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  width: 12rem;
+  height: 5rem;
+  background: var(--main-color);
+  border: .2rem solid var(--main-color);
+  border-radius: .8rem;
+  font-size: 1.5rem;
+  letter-spacing: .1rem;
+  font-weight: 500;
+  z-index: 1;
+  overflow: hidden;
+  margin: 0.5rem 0;
+  color: var(--text-color);
+}
+
+.btn-box a:nth-child(1) {
+  background: transparent;
+  color: var(--main-color);
+}
+
+.btn-box a:nth-child(2) {
+  background: transparent;
+  color: var(--main-color);
+}
+
+.btn-box a:nth-child(3) {
+  background: transparent;
+  color: var(--main-color);
+}
+
+.btn-box a:hover,
+.btn-box a.active {
+  transition: 0.8s;
+  color: var(--primary-color);
+}
+
+.btn-box a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: var(--secondary-color);
+  z-index: -1;
+}
+
+.btn-box a:hover::before {
+  width: 100%;
+  transition: 0.8s;
+}
+
+.heading {
+  font-size: 4rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+span {
+  color: var(--main-color);
+}
